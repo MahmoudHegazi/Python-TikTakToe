@@ -6,3 +6,5 @@ include performance part not steart small 3 nested loops until there might be wi
 see only printed x can be winner if x printed 3 times (he played on tkinter 3 plays, in the 3++ check)
 ![image](https://github.com/MahmoudHegazi/Python-TikTakToe/assets/55125302/ba64a900-494e-4e1a-b726-a518c335bb04)
 
+
+![image](https://github.com/MahmoudHegazi/Python-TikTakToe/assets/55125302/0a7027f1-74ef-40eb-aa75-2b9ef33136ce)
