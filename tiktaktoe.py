@@ -59,7 +59,7 @@ def dynamicGridDraw(total_rows=3, total_col=3, width=75, h=0, height=50, clickCB
 # here developer code for create game and use grid drawer, eg tiktaktoe, dynamicGridDraw(total_rows=3, total_col=3, width=75, h=50, height=50, clickCB=clickEventListener)
 # dynamicGridDraw(total_rows=3, total_col=3, width=40, h=50, height=50, clickCB=clickEventListener) ledo, chess when complete max 12grid
 # x in this simple eg fast, start first so who need x will start first players decide
-
+# this is the main game callback/callbacks, chess maybe need 2 clicks not 1, select, move per player, maybe there lib.createTiktakToe()but this core unique idea using smallest thing in tkinter reading 2 lines from working example of canvas and button, uses Brain RAM to understand more would make bigger lib
 x = True
 plays = []
 def clickEventListener(rc_string):
@@ -85,15 +85,19 @@ def clickEventListener(rc_string):
     print(verify_win(plays))
     #print(btns[rc_string])
 
-wins = [
-      [((1,2),(5,4),(7,8),)],
-      [((1,2),(5,4),(7,8),)]
-    ]
+#it build in conispet static check but it dynamic list and 3 nested loops magic box and other math rules checked this alot by many until return rule maybe with 1 loop instead of 3 but both fast and same game and dynamic 1 if statment only with includes to check all options for win I even not calcuated yet how many options
 #python king not need magicbox maybe later he read it while understanding logic and provide solution for performance only
-t = [
+wins = [
        [(0,0,),(1,1,),(2,2,)],
-       [(2,0,),(1,1,),(0,2,)]
-
+       [(2,0,),(1,1,),(0,2,)],       
+       # sid2 magicbox lets call it same col rule sure have same row rule (later can anlsysised and got 1 list repeated for generate 3 mixed with reverse row will be generate 6 from 1
+       [(0,0,),(1,0,),(2,0,)],
+       [(0,1,),(1,1,),(2,1,)],
+       [(0,2,),(1,2,),(2,2,)],
+       # i did not do this part or complete js magicbox 4 years ago (also can use flask live app send request to make it multiple no need socket both open, create url for game request, save in db, send request for this url, send saved for x and o for each new play the online tkinter simple no socet if requests avail
+       [(0,0,),(0,1,),(0,2,)],
+       [(1,0,),(1,1,),(1,2,)],
+       [(2,0,),(2,1,),(2,2,)]
     ]
 #       [(0,2),(1,1),(2,0)]
 # the idea  basicest need the 3 check and empty
@@ -113,11 +117,14 @@ def verify_win(plays):
     # here knows each player played atleast 3plays need check wining (very hardthing called magicbox math rule premade years ago or big math topic), numpy can help for create arrays or () to loop on all possible options, require math detect rule for this type of game
     if x_can_win == True:
         print("X can be winner")
-
+        # chess will request hard nested must done with some algo or numpy or right number or loops nested or steps instead by trak king (thats when make compo vs player normal chess easy alotwith this lib, diffrent only game callback
+        # this first loop for inital the arrays this the most top important like numpy but in loops one by one can allow all magicbox values as array instead of if and hard math rules simple as hello world and fast, also using tkinter_grid lib is make everything easy and accept all techniuqes for this game and chess later
         for p in x_l:
             x_win = []
             old_x_win = []
-            for win in t:
+            # 2 core this
+            for win in wins:
+                # this
                 for p_a in x_l:
                     print(p_a)
                     print(p_a in win and p_a not in old_x_win)
@@ -136,7 +143,7 @@ def verify_win(plays):
             print('imthe target', x_win)
             print("###!")
             if len(x_win) == 3:
-                print("X Win Nice")
+                print("X Win NOOOB")
                 x_win = []
                 break
             else:
