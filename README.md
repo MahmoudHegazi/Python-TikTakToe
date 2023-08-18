@@ -5,8 +5,10 @@ tiktaktoe using tkinter_grid_lib library
 # how to play:
 open game.py and play, only rule: x plays first, if player need play first so he use x
 
+
 # final update of logic:
-instead of divide wins actions to 3 cases, (3 plays, 4plays, 5plays) now use anslysis made lists, to verify all posibile compiniontion of plays and uniuqe wins rules unique full game from scratch, some others may use quick methods, but all things in this projected reched by steps and logical understanding of the game, and core methods and alsysis the data, also drawing without grid for more better practice
+instead of divide wins actions to 3 cases, (3 plays, 4plays, 5plays) now use anslysis made lists, to verify all posibile compiniontion of plays and uniuqe wins rules unique full game from scratch, some others may use quick methods, but all things in this projected reched by steps and logical understanding of the game, and core methods and alsysis the data, also drawing without grid for more better practice, game Ready for playing next updates will be for input in begning to enter names of players and each one select x or o and also decide who will start x or o
+
 
 include performance part not steart small 3 nested loops until there might be winner, one of players played 3 plays (role of win and used in performance)
 see only printed x can be winner if x printed 3 times (he played on tkinter 3 plays, in the 3++ check)
