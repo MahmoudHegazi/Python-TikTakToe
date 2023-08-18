@@ -147,6 +147,41 @@ def player_win(plays_list=[], play_title=''):
         
     return win_or_not
 
+# game function used to provide list of plays to verify group of plays in same time according to stati list of wining plays eg tiktaktoe [(0,0), (0,1), (0,2)] in wins=[(0,0), (0,1), (0,2)]
+def uniqueListsOf(plays=[], num=3):
+    result = []
+    try:
+        process = plays.copy()    
+        index = 0
+    
+        if len(plays) == num:
+            result.append(plays)
+            return result
+        if len(plays) < num:
+            return result
+    
+        current = []
+        for pi in range(len(plays)):
+            play = plays[pi]
+            current = [play]
+            for proccessI in range(len(process)):
+                if pi == proccessI:
+                    continue
+                processPlay = process[proccessI]
+                # order important               
+                if len(current) >= num:
+                    result.append(current)
+                    current = []
+
+                if processPlay not in current:
+                    current.append(processPlay)
+                    
+        return result
+    except:
+        print("error")
+    return result
+
+
 # the idea  basicest need the 3 check and empty
 def verify_win(plays, canvas):
     x_l = []
