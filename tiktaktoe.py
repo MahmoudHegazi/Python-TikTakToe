@@ -1,5 +1,6 @@
 import tkinter as tk
 root= tk.Tk()
+
 # issue cover only all options for first 3 plays (reduced it only win when normal case 3 first play), require, 4 case, and 5 case, and my performance code helped to start from 3 else no winier
 #right top right it was the end of app but this techiniue one by one step !!!! anlysis point number 3 is have something speacial in this game
 # this lib could creat right now new tiktaktoe game with unlimted rows, and always 3 cols, next update could make it dynamic cols too and fit the row and col, must if 4 rows, and 4 wins so there are 4 cols or keep 3 np but but better 4 for magicbox achived
