@@ -90,15 +90,69 @@ def clickEventListener(rc_string):
         print("fuand......................")
     #print(btns[rc_string])
 
+
+# game function used to provide list of plays to verify group of plays in same time according to stati list of wining plays eg tiktaktoe [(0,0), (0,1), (0,2)] in wins=[(0,0), (0,1), (0,2)]
+def uniqueListsOf(plays=[], num=3, old_result=[]):
+    result = []
+    try:
+        process = plays.copy()    
+        index = 0
+            
+        current = []
+        # (2,2),(1,1),(0,0)
+        mini_i = 0
+        for pi in range(len(plays)):
+            for ai in range(len(plays)):
+                play = plays[pi]
+                current = [play]
+                for proccessI in range(len(process)):
+                    processPlay = process[proccessI]
+                
+                    if processPlay not in current and len(current) != num:                       
+                        current.append(processPlay)
+                    
+                    if len(current) == num:             
+                        if current not in result and current not in old_result:
+                            print(current)
+                            result.append(current)
+                        current = []
+                    
+                    if processPlay not in current:
+                        current.append(processPlay)
+                    
+        return result
+    except Exception as e:
+        raise e
+    return result
+
+wins = [
+     [(0,0,),(1,1,),(2,2,)]
+]
+#this function is what used to generate all posibile passes of any character dynamic eg pass of 3, pass of 4, pass of100 will provide all possibile concated string list to fast search in groped list match , pass or plays nice
+def getAllposibileLists(wins):
+    all_wins = []
+    for awin in wins:
+        items = uniqueListsOf(awin,3)
+        for aitem in items:
+            all_wins.append(aitem)
+    # now start actions by each win in beging, 1,2,3
+    startByEveryOne = []
+    for awin in all_wins:
+        items = uniqueListsOf(awin,3, all_wins)
+        for aitem in items:
+            all_wins.append(aitem)
+    return all_wins
+
 #it build in conispet static check but it dynamic list and 3 nested loops magic box and other math rules checked this alot by many until return rule maybe with 1 loop instead of 3 but both fast and same game and dynamic 1 if statment only with includes to check all options for win I even not calcuated yet how many options
 #python king not need magicbox maybe later he read it while understanding logic and provide solution for performance only
 wins = [
        [(0,0,),(1,1,),(2,2,)],
-       [(2,0,),(1,1,),(0,2,)],       
+       [(2,0,),(1,1,),(0,2,)],
+       [(0,0),(1,1,),(2,2,)],
        # sid2 magicbox lets call it same col rule sure have same row rule (later can anlsysised and got 1 list repeated for generate 3 mixed with reverse row will be generate 6 from 1
        [(0,0,),(1,0,),(2,0,)],
        [(0,1,),(1,1,),(2,1,)],
-       [(0,2,),(1,2,),(2,2,)],
+       [(0,2,),(1,1,),(2,0,)],
        # i did not do this part or complete js magicbox 4 years ago (also can use flask live app send request to make it multiple no need socket both open, create url for game request, save in db, send request for this url, send saved for x and o for each new play the online tkinter simple no socet if requests avail
        [(0,0,),(0,1,),(0,2,)],
        [(1,0,),(1,1,),(1,2,)],
@@ -106,8 +160,8 @@ wins = [
     ]
 #       [(0,2),(1,1),(2,0)]
 
+wins = getAllposibileLists(wins)
 
-print("what")
 # found nested 3 loops in normal not required also loop size must match the len of plays, 4 need 4 unique lists and loop on them and check if any one in wins (case win in play 4)
 
 # !!!!! new 3 dicts array of all posibiole unique options play 1,2,3, !!---len(4-plays) [1,2,3], [1,2,4], [1,3,4], [2,3,4]!!!!--- 5max [1,2,3], [1,2,4], [1,2,5], [1,4,5], [3,4,5]
@@ -238,6 +292,41 @@ def repeat(mainfun, canvas, total_rows=3, total_col=3, width=75, h=50, height=50
     root= tk.Tk()
     mainfun(total_rows, total_col, width, h, height, clickCB)
     
+
+# game function used to provide list of plays to verify group of plays in same time according to stati list of wining plays eg tiktaktoe [(0,0), (0,1), (0,2)] in wins=[(0,0), (0,1), (0,2)]
+def uniqueListsOf(plays=[], num=3):
+    result = []
+    try:
+        process = plays.copy()    
+        index = 0
+    
+        if len(plays) == num:
+            result.append(plays)
+            return result
+        if len(plays) < num:
+            return result
+    
+        current = []
+        for pi in range(len(plays)):
+            play = plays[pi]
+            current = [play]
+            for proccessI in range(len(process)):
+                if pi == proccessI:
+                    continue
+                processPlay = process[proccessI]
+                # order important               
+                if len(current) >= num:
+                    result.append(current)
+                    current = []
+
+                if processPlay not in current:
+                    current.append(processPlay)
+                    
+        return result
+    except:
+        print("error")
+    return result
+
 
 dynamicGridDraw(total_rows=3, total_col=3, width=75, h=50, height=50, clickCB=clickEventListener)
 root.mainloop()
