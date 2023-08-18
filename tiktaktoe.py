@@ -111,13 +111,16 @@ def uniqueListsOf(plays=[], num=3, old_result=[]):
                     if processPlay not in current and len(current) != num:                       
                         current.append(processPlay)
                     
+                    # print(".", processPlay)
                     if len(current) == num:             
+                        # print("hello")
                         if current not in result and current not in old_result:
-                            print(current)
+                            # print(current)
                             result.append(current)
                         current = []
                     
                     if processPlay not in current:
+                        # print("?")
                         current.append(processPlay)
                     
         return result
@@ -134,13 +137,15 @@ def getAllposibileLists(wins):
     for awin in wins:
         items = uniqueListsOf(awin,3)
         for aitem in items:
-            all_wins.append(aitem)
+            if aitem not in all_wins:
+                all_wins.append(aitem)
     # now start actions by each win in beging, 1,2,3
     startByEveryOne = []
     for awin in all_wins:
         items = uniqueListsOf(awin,3, all_wins)
         for aitem in items:
-            all_wins.append(aitem)
+            if aitem not in all_wins:
+                all_wins.append(aitem)
     return all_wins
 
 #it build in conispet static check but it dynamic list and 3 nested loops magic box and other math rules checked this alot by many until return rule maybe with 1 loop instead of 3 but both fast and same game and dynamic 1 if statment only with includes to check all options for win I even not calcuated yet how many options
@@ -148,7 +153,6 @@ def getAllposibileLists(wins):
 wins = [
        [(0,0,),(1,1,),(2,2,)],
        [(2,0,),(1,1,),(0,2,)],
-       [(0,0),(1,1,),(2,2,)],
        # sid2 magicbox lets call it same col rule sure have same row rule (later can anlsysised and got 1 list repeated for generate 3 mixed with reverse row will be generate 6 from 1
        [(0,0,),(1,0,),(2,0,)],
        [(0,1,),(1,1,),(2,1,)],
@@ -163,7 +167,7 @@ wins = [
 wins = getAllposibileLists(wins)
 
 # found nested 3 loops in normal not required also loop size must match the len of plays, 4 need 4 unique lists and loop on them and check if any one in wins (case win in play 4)
-
+# now app not uses cases but some options missing (solve cases 4, 5)
 # !!!!! new 3 dicts array of all posibiole unique options play 1,2,3, !!---len(4-plays) [1,2,3], [1,2,4], [1,3,4], [2,3,4]!!!!--- 5max [1,2,3], [1,2,4], [1,2,5], [1,4,5], [3,4,5]
 # anlysis function inspered from reverse numpy actioin uses 3 nested loop for search instead of make math static numpy nested arrays and do a check
 def player_win(plays_list=[], play_title=''):
@@ -172,6 +176,19 @@ def player_win(plays_list=[], play_title=''):
     list_numpy = []
     global canvas1
     # new 3 dicts array of all posibiole unique options play 1,2,3, !!---len(4-plays) [1,2,3], [1,2,4], [1,3,4], [2,3,4]!!!!--- 5max [1,2,3], [1,2,4], [1,2,5], [1,4,5], [3,4,5]
+    allPosible3Plays = getAllposibileLists(uniqueListsOf(plays_list))
+    print('here is 18',plays_list,play_title)
+    for posiblePlay in allPosible3Plays:
+        if posiblePlay in wins:
+            win_or_not = True
+            print("yes {} Wins".format(play_title))
+            canvas1.delete('all')
+            print("started")
+            button2 = tk.Button(text='You Win', command=partial(repeat, dynamicGridDraw, canvas1, 3, 3, 75, 50, 50, clickEventListener), bg='brown',fg='white', font=('helvetica', 15, 'bold'))
+            canvas1.create_window(100, 100, window=button2)
+            canvas1.pack(side="top", fill="both", expand=True)
+            break
+    """
     if len(plays_list) == 3:        
         for play in plays_list:
             list_numpy.append((play[0], play[1]))
@@ -198,43 +215,9 @@ def player_win(plays_list=[], play_title=''):
         win_or_not = True
     else:
         pass
+    """
         
     return win_or_not
-
-# game function used to provide list of plays to verify group of plays in same time according to stati list of wining plays eg tiktaktoe [(0,0), (0,1), (0,2)] in wins=[(0,0), (0,1), (0,2)]
-def uniqueListsOf(plays=[], num=3):
-    result = []
-    try:
-        process = plays.copy()    
-        index = 0
-    
-        if len(plays) == num:
-            result.append(plays)
-            return result
-        if len(plays) < num:
-            return result
-    
-        current = []
-        for pi in range(len(plays)):
-            play = plays[pi]
-            current = [play]
-            for proccessI in range(len(process)):
-                if pi == proccessI:
-                    continue
-                processPlay = process[proccessI]
-                # order important               
-                if len(current) >= num:
-                    result.append(current)
-                    current = []
-
-                if processPlay not in current:
-                    current.append(processPlay)
-                    
-        return result
-    except:
-        print("error")
-    return result
-
 
 # the idea  basicest need the 3 check and empty
 def verify_win(plays, canvas):
@@ -293,6 +276,7 @@ def repeat(mainfun, canvas, total_rows=3, total_col=3, width=75, h=50, height=50
     mainfun(total_rows, total_col, width, h, height, clickCB)
     
 
+""" dead
 # game function used to provide list of plays to verify group of plays in same time according to stati list of wining plays eg tiktaktoe [(0,0), (0,1), (0,2)] in wins=[(0,0), (0,1), (0,2)]
 def uniqueListsOf(plays=[], num=3):
     result = []
@@ -326,7 +310,6 @@ def uniqueListsOf(plays=[], num=3):
     except:
         print("error")
     return result
-
-
+"""
 dynamicGridDraw(total_rows=3, total_col=3, width=75, h=50, height=50, clickCB=clickEventListener)
 root.mainloop()
