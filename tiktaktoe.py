@@ -247,6 +247,42 @@ def verify_win(plays, canvas):
 # win 1 reverse
 # (0,2), (1, 1), (2,0)
 
+""" dead but diffrent type of possibilties
+# game function used to provide list of plays to verify group of plays in same time according to stati list of wining plays eg tiktaktoe [(0,0), (0,1), (0,2)] in wins=[(0,0), (0,1), (0,2)]
+def uniqueListsOf(plays=[], num=3):
+    result = []
+    try:
+        process = plays.copy()    
+        index = 0
+    
+        if len(plays) == num:
+            result.append(plays)
+            return result
+        if len(plays) < num:
+            return result
+    
+        current = []
+        for pi in range(len(plays)):
+            play = plays[pi]
+            current = [play]
+            for proccessI in range(len(process)):
+                if pi == proccessI:
+                    continue
+                processPlay = process[proccessI]
+                # order important               
+                if len(current) >= num:
+                    result.append(current)
+                    current = []
+
+                if processPlay not in current:
+                    current.append(processPlay)
+                    
+        return result
+    except:
+        print("error")
+    return result
+"""
+
 def repeat(mainfun, canvas, total_rows=3, total_col=3, width=75, h=50, height=50, clickCB=clickEventListener):
     global canvas1
     global index
