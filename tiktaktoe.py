@@ -242,12 +242,10 @@ def verify_win(plays, canvas):
     
     return playerWon
 
-# win 1..
+# win 1.. core magicbox
 #(0, 0), (1, 1), (2,2)
 # win 1 reverse
 # (0,2), (1, 1), (2,0)
-
-
 
 def repeat(mainfun, canvas, total_rows=3, total_col=3, width=75, h=50, height=50, clickCB=clickEventListener):
     global canvas1
@@ -268,42 +266,6 @@ def repeat(mainfun, canvas, total_rows=3, total_col=3, width=75, h=50, height=50
     root= tk.Tk()
     mainfun(total_rows, total_col, width, h, height, clickCB)
     
-
-""" dead
-# game function used to provide list of plays to verify group of plays in same time according to stati list of wining plays eg tiktaktoe [(0,0), (0,1), (0,2)] in wins=[(0,0), (0,1), (0,2)]
-def uniqueListsOf(plays=[], num=3):
-    result = []
-    try:
-        process = plays.copy()    
-        index = 0
-    
-        if len(plays) == num:
-            result.append(plays)
-            return result
-        if len(plays) < num:
-            return result
-    
-        current = []
-        for pi in range(len(plays)):
-            play = plays[pi]
-            current = [play]
-            for proccessI in range(len(process)):
-                if pi == proccessI:
-                    continue
-                processPlay = process[proccessI]
-                # order important               
-                if len(current) >= num:
-                    result.append(current)
-                    current = []
-
-                if processPlay not in current:
-                    current.append(processPlay)
-                    
-        return result
-    except:
-        print("error")
-    return result
-"""
 # this app consider begning of create your own tiktaktoe game with rules, eg valid 4 cols, valid 4-infinty, provide easy positions using col,row as it handsontable not pycanvas
 dynamicGridDraw(total_rows=3, total_col=3, width=75, h=50, height=50, clickCB=clickEventListener)
 root.mainloop()
