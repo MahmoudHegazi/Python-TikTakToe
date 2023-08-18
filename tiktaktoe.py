@@ -13,6 +13,7 @@ btns = {}
 dic = {}
 x = True
 plays = []
+plays_cords = []
 # this dynamic function can draw any number of grid, in html grid is max 12 but here grid max unlimted contrled with width, height you as native match use the valid height, w=width/2, width=50, this how size handled can accept all sizes fit with cells, and cols, and add dynamic custom callback using partials you control, it and get the event listener target class in your cb !!before simplest way to draw grid unlimited rows, col3 , cols can automated to
 def dynamicGridDraw(total_rows=3, total_col=3, width=75, h=0, height=50, clickCB=lambda: None):
     global canvas1
@@ -66,6 +67,11 @@ def dynamicGridDraw(total_rows=3, total_col=3, width=75, h=0, height=50, clickCB
 # this is the main game callback/callbacks, chess maybe need 2 clicks not 1, select, move per player, maybe there lib.createTiktakToe()but this core unique idea using smallest thing in tkinter reading 2 lines from working example of canvas and button, uses Brain RAM to understand more would make bigger lib
 def clickEventListener(rc_string):
     global x
+    # to prevent duplicate player from break order of switch check if duplicate in begning
+    duplicate_play_check = (btns[rc_string]['row'], btns[rc_string]['col'])
+    if duplicate_play_check in plays_cords:
+        print("dulicate play")
+        return False
     currentPlay = 'X'
     if x == True:
         # current play x
@@ -77,6 +83,7 @@ def clickEventListener(rc_string):
         currentPlay = 'O'
         x = True
 
+    print(plays)
     print(currentPlay)
     # the asynco part ez set the key value when player play
     btns[rc_string]['target'].config(text=currentPlay)
@@ -84,12 +91,29 @@ def clickEventListener(rc_string):
     btns[rc_string]['meta'].append({'play': currentPlay})
 
     plays.append(btns[rc_string])
-    z = verify_win(plays, btns[rc_string]['canvas'])
-    print(z, 'what noob')
-    if z == True:
-        print("fuand......................")
-    #print(btns[rc_string])
+    plays_cords.append((btns[rc_string]['row'], btns[rc_string]['col']))
+    win_result = verify_win(plays, btns[rc_string]['canvas'])
 
+    # end of game win or no win or continue
+    
+    if win_result == False and (len(plays) == 9):
+        canvas1.delete('all')
+        button2 = tk.Button(text='No Winner Play Again', command=partial(repeat, dynamicGridDraw, canvas1, 3, 3, 75, 50, 50, clickEventListener), bg='brown',fg='white', font=('helvetica', 15, 'bold'))
+        canvas1.create_window(100, 100, window=button2)
+        canvas1.pack(side="top", fill="both", expand=True, padx=2, pady=2, ipadx=2)
+    elif win_result == True:
+        canvas1.delete('all')
+        win_text = '{} Wins Play Again'.format(currentPlay)
+        #canvas1.config(width=300)
+        button2 = tk.Button(text=win_text, command=partial(repeat, dynamicGridDraw, canvas1, 3, 3, 75, 50, 50, clickEventListener), bg='brown',fg='white', font=('helvetica', 15, 'bold'))
+        canvas1.create_window(100, 100, window=button2)            
+        #canvas1.place(anchor=tk.NW, relx=0.5, rely=0.5)
+        # pack not add only it also fit the canvas
+        canvas1.pack(side="top", fill="both", expand=True, padx=1)
+    else:
+        pass
+    print(win_result, 'what noob')
+    #print(btns[rc_string])
 
 # game function used to provide list of plays to verify group of plays in same time according to stati list of wining plays eg tiktaktoe [(0,0), (0,1), (0,2)] in wins=[(0,0), (0,1), (0,2)]
 def uniqueListsOf(plays=[], num=3, old_result=[]):
@@ -128,9 +152,6 @@ def uniqueListsOf(plays=[], num=3, old_result=[]):
         raise e
     return result
 
-wins = [
-     [(0,0,),(1,1,),(2,2,)]
-]
 #this function is what used to generate all posibile passes of any character dynamic eg pass of 3, pass of 4, pass of100 will provide all possibile concated string list to fast search in groped list match , pass or plays nice
 def getAllposibileLists(wins):
     all_wins = []
@@ -165,7 +186,7 @@ wins = [
 #       [(0,2),(1,1),(2,0)]
 
 wins = getAllposibileLists(wins)
-
+#as mentioned simplest check win for tiktaktoe ignore perpeation of data base is final result play of 3 dicts in wins [(),(),()] in [[(),(),()],[(),(),()]] (heavy anslysis list done before game start)
 # found nested 3 loops in normal not required also loop size must match the len of plays, 4 need 4 unique lists and loop on them and check if any one in wins (case win in play 4)
 # now app not uses cases but some options missing (solve cases 4, 5)
 # !!!!! new 3 dicts array of all posibiole unique options play 1,2,3, !!---len(4-plays) [1,2,3], [1,2,4], [1,3,4], [2,3,4]!!!!--- 5max [1,2,3], [1,2,4], [1,2,5], [1,4,5], [3,4,5]
@@ -177,45 +198,11 @@ def player_win(plays_list=[], play_title=''):
     global canvas1
     # new 3 dicts array of all posibiole unique options play 1,2,3, !!---len(4-plays) [1,2,3], [1,2,4], [1,3,4], [2,3,4]!!!!--- 5max [1,2,3], [1,2,4], [1,2,5], [1,4,5], [3,4,5]
     allPosible3Plays = getAllposibileLists(uniqueListsOf(plays_list))
-    print('here is 18',plays_list,play_title)
+    # single in check for win validate by group of 3||infinty plays not play,play->loop    
     for posiblePlay in allPosible3Plays:
         if posiblePlay in wins:
             win_or_not = True
-            print("yes {} Wins".format(play_title))
-            canvas1.delete('all')
-            print("started")
-            button2 = tk.Button(text='You Win', command=partial(repeat, dynamicGridDraw, canvas1, 3, 3, 75, 50, 50, clickEventListener), bg='brown',fg='white', font=('helvetica', 15, 'bold'))
-            canvas1.create_window(100, 100, window=button2)
-            canvas1.pack(side="top", fill="both", expand=True)
             break
-    """
-    if len(plays_list) == 3:        
-        for play in plays_list:
-            list_numpy.append((play[0], play[1]))
-
-
-        if list_numpy in wins:
-            print("yes {} Wins".format(play_title))
-            print('list_numpy', list_numpy)
-            print('wins', wins)
-            canvas1.delete('all')
-            print("started")
-            button2 = tk.Button(text='You Win', command=partial(repeat, dynamicGridDraw, canvas1, 3, 3, 75, 50, 50, clickEventListener), bg='brown',fg='white', font=('helvetica', 15, 'bold'))
-            canvas1.create_window(100, 100, window=button2)
-            canvas1.pack(side="top", fill="both", expand=True)
-            win_or_not = True
-    elif len(plays_list) == 4:
-        print("##########################case 4 Need CUstom check for array len 4 ######################")
-        print("4- Here Request this arrays unique [1,2,3], [1,2,4], [1,3,4], [2,3,4]")
-        win_or_not = False
-
-    elif len(plays_list) == 5:
-        print("########################## Case 5 ######################")
-        print("5-Here Request this arrays unique [0,1,2][2,0,1][1,2,0], [0,1,3][1,3,0][3,0,1], [0,2,3][3,0,2][2,0,3], [1,2,3][3,2,1][2,1,3], [1,3,4][4,3,1][2,1,3] think this all maybe and more")
-        win_or_not = True
-    else:
-        pass
-    """
         
     return win_or_not
 
@@ -233,23 +220,26 @@ def verify_win(plays, canvas):
     x_can_win = len(x_l) >= 3
     o_can_win = len(o_l) >= 3
 
+    playerWon = False
     # here knows each player played atleast 3plays need check wining (very hardthing called magicbox math rule premade years ago or big math topic), numpy can help for create arrays or () to loop on all possible options, require math detect rule for this type of game
     if x_can_win == True:
         print("X can be winner")
+        
         # chess will request hard nested must done with some algo or numpy or right number or loops nested or steps instead by trak king (thats when make compo vs player normal chess easy alotwith this lib, diffrent only game callback
         # this first loop for inital the arrays this the most top important like numpy but in loops one by one can allow all magicbox values as array instead of if and hard math rules simple as hello world and fast, also using tkinter_grid lib is make everything easy and accept all techniuqes for this game and chess later
-        print(player_win(plays_list=x_l, play_title='X'))
+        playerWon = player_win(plays_list=x_l, play_title='X')
+        print("did you check this first", len(plays), playerWon)
 
-            
-    if o_can_win == True:
+    # check for win of o only if x not win already also x here plays first but this check dynamic if switched assign x and y
+    if playerWon == False and o_can_win == True:
         print("O can be winner")
-        print(player_win(plays_list=o_l, play_title='O'))
+        playerWon = player_win(plays_list=o_l, play_title='O')
         #canvas.delete('all')
         #o_had_win = player_win(plays_list=o_l, wins_rules=wins)
         #if o_had_win:
         #print("O Win python king")
-        
-    return x_l
+    
+    return playerWon
 
 # win 1..
 #(0, 0), (1, 1), (2,2)
@@ -265,12 +255,14 @@ def repeat(mainfun, canvas, total_rows=3, total_col=3, width=75, h=50, height=50
     global root
     global x
     global plays
+    global plays_cords
     canvas.delete('all')
     index = 0
     btns = {}
     dic = {}
     x = True
     plays = []
+    plays_cords = []
     root.destroy()
     root= tk.Tk()
     mainfun(total_rows, total_col, width, h, height, clickCB)
@@ -311,5 +303,6 @@ def uniqueListsOf(plays=[], num=3):
         print("error")
     return result
 """
+# this app consider begning of create your own tiktaktoe game with rules, eg valid 4 cols, valid 4-infinty, provide easy positions using col,row as it handsontable not pycanvas
 dynamicGridDraw(total_rows=3, total_col=3, width=75, h=50, height=50, clickCB=clickEventListener)
 root.mainloop()
